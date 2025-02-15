@@ -1,13 +1,16 @@
 import pygame
 import sys
+from backend.engine import Game
 
 class Main():
     def __init__(self):
-        self.isRunning, self.isPlaying = True, True
+        pygame.init()
+        self.isRunning = True
         self.screenWidth, self.screenHeight = 1024,768
-        self.display = pygame.Surface((self.screenWidth, self.screenHeight))
         self.screen = pygame.display.set_mode((self.screenWidth, self.screenHeight))
         self.clock = pygame.time.Clock()
+        pygame.display.set_caption("Roguelike")
+        self.game = Game(self.screen)
 
     def run(self):
         while self.isRunning:
@@ -16,16 +19,19 @@ class Main():
                 if event.type == pygame.QUIT:
                     self.isRunning = False
             
-            self.display.fill((100, 25, 0))
-            self.screen.blit(self.display, (0, 0))
+            self.screen.fill((100, 25, 0))
+            self.game.process_input(self.dt)
+            self.game.update(self.dt)
+            self.game.render()
             pygame.display.flip()
+
+        pygame.quit()
+        sys.exit()
 
 
 
 if __name__ == "__main__":
-    pygame.init()
     game = Main()
     game.run()
-    pygame.quit()
-    sys.exit()
+
 
